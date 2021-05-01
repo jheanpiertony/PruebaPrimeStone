@@ -34,8 +34,8 @@ class Address(models.Model):
     HOME = 'H'
     TEMPORAL = 'T'
     ADDR_TYPE = [
-        (WORK, 'LABORAL'), 
-        (HOME, 'DOMICILIO'),
+        (WORK, 'WORK'), 
+        (HOME, 'HOME'),
         (TEMPORAL, 'TEMPORAL')
     ]
 

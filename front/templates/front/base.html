@@ -6,6 +6,7 @@
     <title>{% block title %}{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'front/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'front/css/custom.min.css'%}">
 </head>
 <body>
     <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
@@ -27,18 +28,15 @@
         </div>
     </div>
 
-<br />
-<br />
-<br />
-<br />
     <div class="container">
         <div class="page-header" id="banner">
-            <div class="row">
-                {% block main-content %} 
-                {% endblock main-content %}
-            </div>
+            {% block main-content %} 
+            {% endblock main-content %}
         </div>
     </div>
+
+<script src="{% static 'front/js/jquery.min.js' %}"></script>
+<script src="{% static 'front/js/bootstrap.bundle.min.js' %}"></script>
 
 </body>
 </html>

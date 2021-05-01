@@ -1,0 +1,12 @@
+{% extends "front/base.html" %}
+{% block title %}Unlink course{% endblock title %}
+
+{% block main-content %}
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <h1>Confirm Course Unlink</h1>
+    <form action="." method="post">{% csrf_token %}
+        <p>Are you sure you want to unlink "{{ object }}"?</p>
+        <input type="submit" value="Confirm" />&nbsp;
+    </form>
+</div>
+{% endblock main-content %}
