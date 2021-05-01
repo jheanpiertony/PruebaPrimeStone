@@ -15,11 +15,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
+from common import views
 from front.views import HomeView
+
+
+# API routes
+router = routers.DefaultRouter()
+router.register(r'student', views.StudentViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('front/', include('front.urls', namespace='front')),
-    path('', HomeView.as_view(), name='home')
+    path('common/', include(router.urls)),
+    path('', HomeView.as_view(), name='home'),
+    path('api/token/', obtain_jwt_token, name='token_obtain_pair'),
+    path('api/token/refresh/', refresh_jwt_token, name='token_refresh'),
 ]
