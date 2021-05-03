@@ -1,0 +1,105 @@
+{% extends 'front/base.html' %}
+{% block title %} 
+    {% if update %}Update{% else %}Create{% endif %} Student
+{% endblock title %}
+{% block main-content %}
+<div class="row">
+    <div class="col-lg-7 col-md-7 col-sm-7">
+        <h1>{% if update %}Update{% else %}Create{% endif %} Student</h1>
+        {% include "front/messages.html" %}
+        <form action="." method="post">{% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="form-group row">
+                <label for="{{ form.name.id_for_label }}" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    {{ form.name.errors }}
+                    {{ form.name }}
+                    <!-- input type="text" readonly="" class="form-control-plaintext" id="staticEmail" value="email@example.com"-->
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="{{ form.last_name.id_for_label }}" class="col-sm-2 col-form-label">Last name</label>
+                <div class="col-sm-10">
+                    {{ form.last_name.errors }}
+                    {{ form.last_name }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="{{ form.birthdate.id_for_label }}" class="col-sm-2 col-form-label">Birthdate</label>
+                <div class="col-sm-10">
+                    {{ form.birthdate.errors }}
+                    {{ form.birthdate }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="{{ form.gender.id_for_label }}" class="col-sm-2 col-form-label">Gender</label>
+                <div class="col-sm-10">
+                    {{ form.gender.errors }}
+                    {{ form.gender }}
+                </div>
+            </div>
+            <input type="submit" class="btn btn-primary" value="{% if update %}Update{% else %}Insert{% endif %}">
+        </form>
+        Go to <a href="{% url 'front:student-list' %}">the student list</a>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <h3>Address  <a href="{% url 'front:address-add' object.id %}" class="btn btn-primary">+</a></h3>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Location</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for address in object.address_set.all %}
+                    <tr>
+                        <th scope="row">{{address.location}}</th>
+                        <td>{{address.addr_type}}</td>
+                        <td>
+                            <a href="{% url 'front:address-delete' pk=address.pk student_id=object.id %}">delete</a>
+                        </td>
+                    </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<br/>
+<br/>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        {% if update %}
+            <h2>Courses   <a href="{% url 'front:course-link' student_id=object.id%}" class="btn btn-primary">Add</a></h2>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Code</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Init Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in object.courses.all %}
+                        <tr>
+                            <th scope="row">{{course.code}}</th>
+                            <td>{{course.name}}</td>
+                            <td>{{course.init_date}}</td>
+                            <td>{{course.end_date}}</td>
+                            <td>
+                                <a href="{% url 'front:course-unlink' pk=course.pk student_id=object.id %}">unlink</a>
+                            </td>
+                        </tr>
+                    {% endfor%}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock main-content %}

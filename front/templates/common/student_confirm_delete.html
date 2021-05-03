@@ -1,0 +1,14 @@
+{% extends "front/base.html" %}
+{% block title %}Delete student{% endblock title %}
+
+{% block main-content %}
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <h1>Confirm Student Deletion</h1>
+    <form action="." method="post">{% csrf_token %}
+        <p>Are you sure you want to delete "{{ object }}"?</p>
+        <input type="submit" value="Confirm" />&nbsp;
+        <a href="{% url "front:student-list" %}#student-{{ object.pk }}">
+          » cancel</a>
+    </form>
+</div>
+{% endblock main-content %}
