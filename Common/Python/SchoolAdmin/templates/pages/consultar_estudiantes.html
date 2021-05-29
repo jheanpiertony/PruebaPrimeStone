@@ -1,0 +1,321 @@
+{% extends 'bases/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+<div id="shadowdiv" class="card">
+    <div class="card-header"><h3>Consultar Estudiantes</h3></div>
+    <div class="card-body">
+        <div class="text-center">
+            <button type="button" class="btn btn-primary" data-toggle="modal" 
+                data-target="#demoModal">Agregar-Editar Estudiante</button>
+        </div>
+        <div class="modal fade" id="demoModal" tabindex="-1" role="dialog" aria-labelledby="demoModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="demoModalLabel">Agregar-Editar Estudiante</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="forms-sample" method="POST">{% csrf_token %}
+                            {% crispy filter_form %}
+                            <input type="number" style="display:none" id="id_estudiante_edit">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="add_estudiante()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="edit_create_direccion" tabindex="-1" role="dialog" aria-labelledby="edit_create_direccionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="edit_create_direccionLabel">Agregar-Editar Direccion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="forms-sample" method="POST">{% csrf_token %}
+                            {% crispy filter_form_direccion %}
+                            <input type="number" style="display:none" id="direccion_id_edit">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="add_direccion()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="DireccionModal" tabindex="-1" role="dialog" aria-labelledby="DireccionModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="DireccionModalLabel">Agregar-Editar Estudiante</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <table id="data_table_direccion" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Direccion</th>
+                                    <th>Tipo Direccion</th>
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-toggle="modal" data-target="#edit_create_direccion" data-dismiss="modal" class="btn btn-success">Nuevo +</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <table id="data_table" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Fecha Nacimiento</th>
+                    <th>Genero</th>
+                    <th>Direcciones</th>
+                    <th>Cursos</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                    <tr>
+                        <td> <label> {{ item.Nombres }} </label></td>
+                        <td> <label> {{ item.Apellidos }} </label></td>
+                        <td> <label> {{ item.FechaNacimento }} </label></td>
+                        <td> <label> {{ item.Genero }} </label></td>
+                        <td data-toggle="modal" data-target="#DireccionModal"
+                            onclick="get_direcciones('{{ item.id }}')"><a href="#" ><i class="ik ik-eye"></i></a></td>
+                        <td><a href="{% url 'estudiante_curso' estudiante_id=item.id %}"><i class="ik ik-eye"></i></a></td>
+                        <td><a data-toggle="modal" data-target="#demoModal"
+                            onclick="get_datos_estudiante('{{ item.id }}')"><i class="ik ik-edit-2"></i></a></td>
+                        <td onclick="delete_estudiante('{{ item.id }}')"><a href="#"><i class="ik ik-trash-2"></i></a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+{% block script %}
+
+<script type="text/javascript">
+    var uri = "http://127.0.0.1:8000"
+    function add_estudiante(){
+        var nombres = $('#id_Nombres').val();
+        var apellidos = $('#id_Apellidos').val();
+        var fecha_nacimiento = $('#id_FechaNacimento').val();
+        var genero = $('#id_Genero option:selected').val();
+        var id_estudiante = $('#id_estudiante_edit').val();
+        var request = $.ajax({
+            type: "POST",
+            url: uri + "/api_crear_editar_estudiantes/",
+            headers: {
+                'Authorization': 'Token  '+'{{ token }}',
+            },
+            data: {
+                "id": id_estudiante,
+                "nombres": nombres,
+                "apellidos": apellidos,
+                "fecha_nacimiento": fecha_nacimiento,
+                "genero": genero,
+                "csrfmiddlewaretoken":"{{ csrf_token }}",
+            },
+        });
+        request.done(function(response) {
+            $.toast({
+                heading: 'Mensaje',
+                text: response.mensaje,
+                showHideTransition: 'slide',
+                icon: 'info',
+                loaderBg: '#46c35f',
+                position: 'top-right'
+            })
+            setTimeout(function(){location.reload()}, 3000);
+        });
+    };
+    function get_datos_estudiante(id_estudiante){
+        var request = $.ajax({
+            type: "POST",
+            url: uri + "/api_datos_estudiantes/",
+            headers: {
+                'Authorization': 'Token  '+'{{ token }}',
+            },
+            data: {
+                "id": id_estudiante,
+                "csrfmiddlewaretoken":"{{ csrf_token }}",
+            },
+        });
+        request.done(function(response) {
+            $('#id_Nombres').val(response.data.Nombres);
+            $('#id_Apellidos').val(response.data.Apellidos);
+            $('#id_FechaNacimento').val(moment(Date(response.data.FechaNacimento)).format('YYYY-MM-DD'));
+            $('#id_Genero').val(response.data.Genero);
+            $('#id_estudiante_edit').val(response.data.id);
+        });
+    };
+    function delete_estudiante(id_estudiante){
+        var request = $.ajax({
+            type: "POST",
+            url: uri + "/api_eliminar_estudiantes/",
+            headers: {
+                'Authorization': 'Token  '+'{{ token }}',
+            },
+            data: {
+                "id": id_estudiante,
+                "csrfmiddlewaretoken":"{{ csrf_token }}",
+            },
+        });
+        request.done(function(response) {
+            $.toast({
+                heading: 'Mensaje',
+                text: response.mensaje,
+                showHideTransition: 'slide',
+                icon: 'info',
+                loaderBg: '#46c35f',
+                position: 'top-right'
+            })
+            setTimeout(function(){location.reload()}, 3000);
+        });
+    };
+
+    function get_direcciones(id_estudiante){
+        $('#id_estudiante_edit').val(id_estudiante);
+        var request = $.ajax({
+            type: "POST",
+            url: "{% url 'get_direcciones' %}",
+            data: {
+                "estudiante_id": id_estudiante,
+                "csrfmiddlewaretoken":"{{ csrf_token }}",
+            },
+        });
+        request.done(function(response) {
+            $("#data_table_direccion tr").remove();
+            for (item in response.data){
+                $('#data_table_direccion').append( '<tr><td>' + response.data[item].Direccion + '</td><td>' + response.data[item].TipoDireccionsrt + '</td><td data-toggle="modal" data-target="#edit_create_direccion" data-dismiss="modal" onclick="get_datos_direccion('+response.data[item].id+')" ><a href="#"><i class="ik ik-edit-2"></i></a></td><td onclick="delete_direccion('+response.data[item].id+')"><a href="#"><i class="ik ik-trash-2"></i></a></td></tr>' );
+            }
+        });
+    };
+    function add_direccion(){
+        var direccion = $('#id_Direccion').val();
+        var tipo_direccion = $('#id_TipoDireccion').val();
+        var direccion_id_edit = $('#direccion_id_edit').val();
+        var id_estudiante = $('#id_estudiante_edit').val();
+        var request = $.ajax({
+            type: "POST",
+            url: "{% url 'create_edit_direccion' %}",
+            data: {
+                "direccion_id": direccion_id_edit,
+                "direccion": direccion,
+                "estudiante_id": id_estudiante,
+                "tipo_direccion": tipo_direccion,
+                "csrfmiddlewaretoken":"{{ csrf_token }}",
+            },
+        });
+        request.done(function(response) {
+            $.toast({
+                heading: 'Mensaje',
+                text: response.data,
+                showHideTransition: 'slide',
+                icon: 'info',
+                loaderBg: '#46c35f',
+                position: 'top-right'
+            })
+            setTimeout(function(){location.reload()}, 3000);
+        });
+    };
+    function get_datos_direccion(direccion_id){
+        var request = $.ajax({
+            type: "POST",
+            url: "{% url 'get_data_direccion' %}",
+            data: {
+                "direccion_id": direccion_id,
+                "csrfmiddlewaretoken":"{{ csrf_token }}",
+            },
+        });
+        request.done(function(response) {
+            $('#id_Direccion').val(response.data[0].Direccion);
+            $('#id_TipoDireccion').val(response.data[0].TipoDireccion);
+            $('#direccion_id_edit').val(response.data[0].id);
+            $('#id_estudiante_edit').val(response.data[0].Estudiante_id);
+        });
+    };
+    function delete_direccion(direccion_id){
+        var request = $.ajax({
+            type: "POST",
+            url: "{% url 'delete_direccion' %}",
+            data: {
+                "direccion_id": direccion_id,
+                "csrfmiddlewaretoken":"{{ csrf_token }}",
+            },
+        });
+        request.done(function(response) {
+            $.toast({
+                heading: 'Mensaje',
+                text: response.mensaje,
+                showHideTransition: 'slide',
+                icon: 'info',
+                loaderBg: '#46c35f',
+                position: 'top-right'
+            })
+            setTimeout(function(){location.reload()}, 3000);
+        });
+    };
+
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

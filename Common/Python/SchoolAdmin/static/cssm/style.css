@@ -1,0 +1,5 @@
+#shadowdiv {
+    -webkit-box-shadow: 25px 25px 69px -6px rgba(0,0,0,0.75);
+-moz-box-shadow: 25px 25px 69px -6px rgba(0,0,0,0.75);
+box-shadow: 25px 25px 69px -6px rgba(0,0,0,0.75);
+}
