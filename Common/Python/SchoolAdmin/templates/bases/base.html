@@ -1,0 +1,122 @@
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}  
+<!doctype html>
+<html class="no-js" lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>School Admin</title>
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'plugins/bootstrap/dist/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+        <link rel="stylesheet" href="{% static 'plugins/ionicons/dist/css/ionicons.min.css' %}">
+        <link rel="stylesheet" href="{% static 'plugins/icon-kit/dist/css/iconkit.min.css' %}">
+        <link rel="stylesheet" href="{% static 'plugins/select2/dist/css/select2.min.css' %}">
+        <link rel="stylesheet" href="{% static 'plugins/perfect-scrollbar/css/perfect-scrollbar.css' %}">
+        <link rel="stylesheet" href="{% static 'plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}">
+        <link rel="stylesheet" href="{% static 'dist/css/theme.min.css' %}">
+        <link rel="stylesheet" href="{% static 'cssm/style.css' %}">
+        <link rel="stylesheet" href="{% static 'plugins/jquery-toast-plugin/dist/jquery.toast.min.css' %}">
+        <script src="{% static 'src/js/vendor/modernizr-2.8.3.min.js' %}"></script>
+    </head>
+    <style>
+        .formColumn{
+            border:none;
+        }
+    </style>
+    <body>
+        <div class="wrapper">
+            <header class="header-top" header-theme="dark">
+                <div class="container-fluid">
+                    <div class="d-flex justify-content-between">
+                        <div class="top-menu d-flex align-items-center">
+                            <button type="button" class="btn-icon mobile-nav-toggle d-lg-none"><span></span></button>
+                            <button type="button" id="navbar-fullscreen" class="nav-link"><i class="ik ik-maximize"></i></button>
+                         </div>
+                        <div class="top-menu d-flex align-items-center">
+                            <div class="dropdown">
+                                <a class="dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="avatar" src="{% static 'img/user.jpg' %}" alt=""></a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" href="{% url 'logout' %}"><i class="ik ik-power dropdown-icon"></i> Logout</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-wrap">
+                <div class="app-sidebar colored">
+                    <div class="sidebar-header">
+                        <a class="header-brand" href="../index.html">
+                            <div class="logo-img">
+                                <img src="{% static 'src/img/brand-white.svg' %}" class="header-brand-img" alt="lavalite">
+                            </div>
+                            <span class="text">ThemeKit</span>
+                        </a>
+                        <button type="button" class="nav-toggle"><i data-toggle="expanded" class="ik ik-toggle-right toggle-icon"></i></button>
+                        <button id="sidebarClose" class="nav-close"><i class="ik ik-x"></i></button>
+                    </div>
+                    <div class="sidebar-content">
+                        <div class="nav-container">
+                            <nav id="main-menu-navigation" class="navigation-main">
+                                <div class="nav-lavel">Menu</div>
+                                <div class="nav-item has-sub">
+                                    <a href="javascript:void(0)"><i class="ik ik-layers"></i><span>Estudiantes</span></a>
+                                    <div class="submenu-content">
+                                        <a href="{% url 'consultar_estudiantes' %}" class="menu-item">CRUD</a>
+                                    </div>
+                                </div>
+                                <div class="nav-item has-sub">
+                                    <a href="javascript:void(0)"><i class="ik ik-layers"></i><span>Cursos</span></a>
+                                    <div class="submenu-content">
+                                        <a href="{% url 'consultar_cursos' %}" class="menu-item">CRUD</a>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-content">
+                    <div class="container-fluid">
+                        {% block content %}
+
+                        {% endblock %}
+                    </div>
+                </div>
+                <footer class="footer">
+                    <span class="text-center text-sm-left d-md-inline-block">Copyright ©DC</span>
+                </footer>
+            </div>
+        </div>
+
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script src="{% static 'src/js/vendor/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'plugins/popper.js/dist/umd/popper.min.js' %}" ></script>
+        <script src="{% static 'plugins/bootstrap/dist/js/bootstrap.min.js' %}" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+        <script src="{% static 'dist/js/theme.min.js' %}"></script>
+        <script src="{% static 'plugins/select2/dist/js/select2.min.js' %} "></script>
+        <script src="{% static 'plugins/screenfull/dist/screenfull.js' %}" ></script>
+        <script src="{% static 'plugins/sweetalert/dist/sweetalert.min.js' %}"></script>
+        <script src="{% static 'plugins/summernote/dist/summernote-bs4.min.js' %}"></script>
+        <script src="{% static 'js/layouts.js' %}"></script>
+        <script src="{% static 'js/datatables.js' %}"></script>
+        <script src="{% static 'plugins/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+        <script src="{% static 'plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+        <script src="{% static 'plugins/jquery-toast-plugin/dist/jquery.toast.min.js' %}"></script>
+        <script src="{% static 'js/alerts.js' %}"></script>
+        <script src="{% static 'plugins/perfect-scrollbar/dist/perfect-scrollbar.min.js' %}" ></script>
+        {% block script %}
+
+        {% endblock %}
+    </body>
+</html>
+

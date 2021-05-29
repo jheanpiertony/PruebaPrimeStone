@@ -1,0 +1,175 @@
+{% extends 'bases/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+<div id="shadowdiv" class="card">
+    <div class="card-header"><h3>Consultar Cursos</h3></div>
+    <div class="card-body">
+        <div class="text-center">
+            <button type="button" class="btn btn-primary" data-toggle="modal" 
+                data-target="#demoModal">Agregar Curso</button>
+        </div>
+        <div class="modal fade" id="demoModal" tabindex="-1" role="dialog" aria-labelledby="demoModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="demoModalLabel">Agregar Curso</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="forms-sample" method="POST">{% csrf_token %}
+                            {% crispy filter_form %}
+                            <input type="number" style="display:none" id="id_curso_edit">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="add_curso()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <table id="data_table" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Codigo Curso</th>
+                    <th>Nombre Curso</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Fin</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                    <tr>
+                        <td> <label> {{ item.CodigoCurso }} </label></td>
+                        <td> <label> {{ item.NombreCurso }} </label></td>
+                        <td> <label> {{ item.FechaInicio }} </label></td>
+                        <td> <label> {{ item.FechaFin }} </label></td>
+                        <td data-toggle="modal" data-target="#demoModal"
+                        onclick="get_datos_curso('{{ item.id }}')" ><a href="#"><i class="ik ik-edit-2"></i></a></td>
+                        <td onclick="delete_curso('{{ item.id }}')" ><a href="#"><i class="ik ik-trash-2"></i></a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+{% block script %}
+
+<script type="text/javascript"> 
+    function add_curso(){
+
+        var codigo_curso = $('#id_codigo_curso').val();
+        var nombre_curso = $('#id_nombre_curso').val();
+        var fecha_inicio = $('#id_fecha_inicio').val();
+        var fecha_fin = $('#id_fecha_fin').val();
+        var id_curso = $('#id_curso_edit').val();
+        var request = $.ajax({
+            type: "POST",
+            url: "{% url 'add_curso_ajax' %}",
+            data: {
+                "id_curso": id_curso,
+                "codigo_curso": codigo_curso,
+                "nombre_curso": nombre_curso,
+                "fecha_inicio": fecha_inicio,
+                "fecha_fin": fecha_fin,
+                "csrfmiddlewaretoken":"{{ csrf_token }}",
+            },
+        });
+        request.done(function(response) {
+            $.toast({
+                heading: response.campo,
+                text: response.mensaje,
+                showHideTransition: 'slide',
+                icon: 'info',
+                loaderBg: '#46c35f',
+                position: 'top-right'
+            })
+            setTimeout(function(){location.reload()}, 3000);
+        });
+    };
+    function get_datos_curso(id_curso){
+        var request = $.ajax({
+            type: "POST",
+            url: "{% url 'get_info_curso' %}",
+            data: {
+                "id_curso": id_curso,
+                "csrfmiddlewaretoken":"{{ csrf_token }}",
+            },
+        });
+        request.done(function(response) {
+            $('#id_codigo_curso').val(response.data.CodigoCurso);
+            $('#id_nombre_curso').val(response.data.NombreCurso);
+            $('#id_fecha_inicio').val(moment(Date(response.data.FechaInicio)).format('YYYY-MM-DD'));
+            $('#id_fecha_fin').val(moment(Date(response.data.FechaFin)).format('YYYY-MM-DD'));
+            $('#id_curso_edit').val(response.data.id);
+        });
+    };
+    function delete_curso(id_curso){
+        var request = $.ajax({
+            type: "POST",
+            url: "{% url 'delete_curso_ajax' %}",
+            data: {
+                "id_curso": id_curso,
+                "csrfmiddlewaretoken":"{{ csrf_token }}",
+            },
+        });
+        request.done(function(response) {
+            $.toast({
+                heading: response.campo,
+                text: response.mensaje,
+                showHideTransition: 'slide',
+                icon: 'info',
+                loaderBg: '#46c35f',
+                position: 'top-right'
+            })
+            setTimeout(function(){location.reload()}, 3000);
+        });
+    };
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

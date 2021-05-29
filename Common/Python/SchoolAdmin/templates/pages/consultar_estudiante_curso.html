@@ -1,0 +1,163 @@
+{% extends 'bases/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+<div id="shadowdiv" class="card">
+    <div class="card-header"><h3>Consultar Estudiante-Curso</h3></div>
+    <div class="card-body">
+        <div class="text-center">
+            <button type="button" class="btn btn-primary" data-toggle="modal" 
+                data-target="#demoModal">Agregar-Editar Estudiante-Curso</button>
+        </div>
+        <div class="modal fade" id="demoModal" tabindex="-1" role="dialog" aria-labelledby="demoModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="demoModalLabel">Agregar-Editar Estudiante-Curso</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="forms-sample" method="POST">{% csrf_token %}
+                            {% crispy filter_form %}
+                            <input type="number"  style="display:none" id="id_estudiante_curso_edit">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="add_estudiante_curso()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <table id="data_table" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Estudiante</th>
+                    <th>Nombre Curso</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                    <tr>
+                        <td> <label> {{ item.Estudiante.Nombres }} {{ item.Estudiante.Apellidos }}</label></td>
+                        <td> <label> {{ item.Curso.NombreCurso }} </label></td>
+                        <td data-toggle="modal" data-target="#demoModal"
+                        onclick="get_datos_estudiante_curso('{{ item.id }}')" ><a href="#"><i class="ik ik-edit-2"></i></a></td>
+                        <td onclick="delete_estudiante_curso('{{ item.id }}')" ><a href="#"><i class="ik ik-trash-2"></i></a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+{% block script %}
+
+<script type="text/javascript"> 
+    function add_estudiante_curso(){
+
+        var id_estudiante_curso = $('#id_estudiante_curso_edit').val();
+        var id_curso = $('#id_Curso').val();
+        var request = $.ajax({
+            type: "POST",
+            url: "{% url 'add_estudiante_curso_ajax' %}",
+            data: {
+                "id_curso": id_curso,
+                "id_estudiante": '{{ estudiante_id }}',
+                "id_estudiante_curso": id_estudiante_curso,
+                "csrfmiddlewaretoken":"{{ csrf_token }}",
+            },
+        });
+        request.done(function(response) {
+            $.toast({
+                heading: response.campo,
+                text: response.mensaje,
+                showHideTransition: 'slide',
+                icon: 'info',
+                loaderBg: '#46c35f',
+                position: 'top-right'
+            })
+            setTimeout(function(){location.reload()}, 3000);
+        });
+    };
+    function get_datos_estudiante_curso(id_estudiante_curso){
+        var request = $.ajax({
+            type: "POST",
+            url: "{% url 'get_info_estudiante_curso' %}",
+            data: {
+                "id_estudiante_curso": id_estudiante_curso,
+                "csrfmiddlewaretoken":"{{ csrf_token }}",
+            },
+        });
+        request.done(function(response) {
+            $('#id_Curso').val(response.data.Curso);
+            $('#id_estudiante_curso_edit').val(id_estudiante_curso);
+        });
+    };
+    function delete_estudiante_curso(id_estudiante_curso){
+        var request = $.ajax({
+            type: "POST",
+            url: "{% url 'delete_estudiante_curso' %}",
+            data: {
+                "id_estudiante_curso": id_estudiante_curso,
+                "csrfmiddlewaretoken":"{{ csrf_token }}",
+            },
+        });
+        request.done(function(response) {
+            $.toast({
+                heading: response.campo,
+                text: response.mensaje,
+                showHideTransition: 'slide',
+                icon: 'info',
+                loaderBg: '#46c35f',
+                position: 'top-right'
+            })
+            setTimeout(function(){location.reload()}, 3000);
+        });
+    };
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
