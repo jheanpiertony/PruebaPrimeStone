@@ -116,11 +116,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
 
+"""Configuracion resframework para el api por JWT"""
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
+
+"""Configuracion del log en archivo de texto"""
 
 LOGGING = {
     'version': 1,
@@ -148,6 +152,7 @@ LOGGING = {
     },
 }
 
+"""Configuracion del token para el api"""
 DEFAULTS = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),

@@ -1,3 +1,16 @@
+""" 
+Creditos
+
+Autor = Gerardo Beltran Pulido
+version = "1.0.0
+correo = "gerbel06@gmail.com
+Estado = "Dev
+Fecha = "2021-06-04
+
+
+"""
+
+
 from django.db import models
 
 """En este archivo se crean las clases o modelos de la base de datos"""

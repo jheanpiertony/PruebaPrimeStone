@@ -3,15 +3,20 @@ from api.serializers import EstudianteSerializer, CursoSerializer,DireccionSeria
 from api.models import Estudiante,Curso,Direccion
 from rest_framework.permissions import IsAuthenticated
 
+""" 
+Creditos
 
-def home(request):
-    """
-    """
-    context = admin.site.each_context(request)
-    context.update({'title': _('Home'), })
+Autor = Gerardo Beltran Pulido
+version = "1.0.0
+correo = "gerbel06@gmail.com
+Estado = "Dev
+Fecha = "2021-06-04
 
-    template = 'home.html'
-    return render(request, template, context)
+
+"""
+
+
+"""Se crean las views para consumir la api y se le agrega los serializadores y la autenticacion por JWT"""
 
 class CursoViewSet(viewsets.ModelViewSet):
     queryset = Curso.objects.all().order_by('CodigoCurso')

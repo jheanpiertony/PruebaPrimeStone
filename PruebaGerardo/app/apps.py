@@ -2,6 +2,22 @@ from suit.apps import DjangoSuitConfig
 from suit.menu import ParentItem, ChildItem
 from django.utils.translation import gettext_lazy as _
 
+""" 
+Creditos
+
+Autor = Gerardo Beltran Pulido
+version = "1.0.0
+correo = "gerbel06@gmail.com
+Estado = "Dev
+Fecha = "2021-06-04
+
+
+"""
+
+
+""" Se crea la configuracion del menu de django suits"""
+
+
 class SuitConfig(DjangoSuitConfig):
     layout = 'vertical'
 
@@ -20,6 +36,10 @@ class SuitConfig(DjangoSuitConfig):
                 ChildItem(
                     label=_('Direcciones'),
                     url='/api/direccion/',
+                ),
+                ChildItem(
+                    label=_('API'),
+                    url='/api/',
                 ),
             ],
             icon='fa fa-briefcase',
