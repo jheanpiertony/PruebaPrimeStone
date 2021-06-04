@@ -1,0 +1,16 @@
+{% extends 'admin/login.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block branding %}
+    <h1 id="site-name">
+        <a href="{% url 'admin:index' %}">
+             <img src="{% static 'app/Images/logo_admin.png' %}" width="360px" />
+        </a>
+    </h1>
+{% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+{% endblock %}
+
