@@ -19,16 +19,17 @@ Fecha = "2021-06-04
 """Se crean las views para consumir la api y se le agrega los serializadores y la autenticacion por JWT"""
 
 class CursoViewSet(viewsets.ModelViewSet):
-    queryset = Curso.objects.all().order_by('CodigoCurso')
+    queryset = Curso.objects.all().order_by('pk')
     serializer_class = CursoSerializer
     permission_classes = [IsAuthenticated]
 
+
 class EstudianteViewSet(viewsets.ModelViewSet):
-    queryset = Estudiante.objects.all().order_by('Nombres')
+    queryset = Estudiante.objects.all().order_by('pk')
     serializer_class = EstudianteSerializer
-    permission_classes = [IsAuthenticated]
+
 
 class DireccionViewSet(viewsets.ModelViewSet):
-    queryset = Direccion.objects.all().order_by('StringDireccion')
+    queryset = Direccion.objects.all().order_by('pk')
     serializer_class = DireccionSerializer
     permission_classes = [IsAuthenticated]

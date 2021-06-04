@@ -22,14 +22,14 @@ Fecha = "2021-06-04
 class CursoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Curso
-        fields = ('CodigoCurso', 'NombreCurso', 'FechaInicio', 'FechaFin')
+        fields = ('pk','CodigoCurso', 'NombreCurso', 'FechaInicio', 'FechaFin')
 
 class EstudianteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Estudiante
-        fields = ('Nombres', 'Apellidos', 'FechaNacimento', 'Genero', 'Cursos')
+        fields = ('pk','Nombres', 'Apellidos', 'FechaNacimento', 'Genero')
 
 class DireccionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Direccion
-        fields = ('StringDireccion', 'TipoDireccion', 'Estudiante')
+        fields = ('pk','StringDireccion', 'TipoDireccion', 'Estudiante')
