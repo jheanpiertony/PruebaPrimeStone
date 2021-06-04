@@ -1,0 +1,5 @@
+Django==2.2.24
+djangorestframework==3.12.4
+djangorestframework-simplejwt==4.7.1
+PyJWT==2.1.0
+ -e git://github.com/darklow/django-suit.git@v2#egg=django-suit
