@@ -36,11 +36,7 @@ class SuitConfig(DjangoSuitConfig):
                 ChildItem(
                     label=_('Direcciones'),
                     url='/api/direccion/',
-                ),
-                ChildItem(
-                    label=_('API'),
-                    url='/api/',
-                ),
+                )
             ],
             icon='fa fa-briefcase',
         )
